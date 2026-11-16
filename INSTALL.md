@@ -16,9 +16,9 @@ This app is not in the Homey App Store. You install it from your computer with t
 
 ## Install or update the app
 
-4. Download this repository (green **Code** button → **Download ZIP**, then unzip), or clone it:
+4. Download the zip from the [latest release](https://github.com/ThaWolfie/homey-ecohome-heatpump/releases/latest) and unzip it, or clone the repository:
    ```
-   git clone <this repository URL>
+   git clone https://github.com/ThaWolfie/homey-ecohome-heatpump.git
    ```
 5. In a terminal, go to the folder and install:
    ```

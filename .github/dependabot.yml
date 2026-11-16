@@ -1,0 +1,26 @@
+version: 2
+updates:
+  # Keeps the GitHub Actions in .github/workflows up to date (checkout, setup-node, Athom's Homey actions)
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    groups:
+      github-actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+
+  # The app has no npm dependencies today; this picks them up automatically if any are added
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    commit-message:
+      prefix: deps

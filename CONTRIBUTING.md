@@ -13,8 +13,17 @@ Thanks for helping! The most useful contribution is an **address map for a heat 
 
 - Keep the app free of npm dependencies (Node built-ins only).
 - Add new address sets next to `A` and `A_NEWNTIDE` in `drivers/heatpump/device.js`, with a comment saying which model they were confirmed on.
-- Bump the version in `.homeycompose/app.json` and `package.json`, and add an entry to `CHANGELOG.md` and `.homeychangelog.json`.
-- Run `homey app validate` before opening a pull request.
+- Don't bump the version in a pull request; the Release workflow does that.
+- Run `homey app validate` before opening a pull request. CI runs the same check, plus a syntax and version check, on every push and pull request.
+
+## Releasing (maintainers)
+
+1. Go to **Actions → Release → Run workflow**.
+2. Enter the new version (`patch`, `minor`, `major` or e.g. `0.2.0`) and a one-line changelog in English.
+3. The workflow validates the app, bumps the version in all files, updates `CHANGELOG.md` and `.homeychangelog.json`, tags the commit, and creates a GitHub release with an installable zip.
+4. Tick **Also publish to the Homey App Store** only when the `HOMEY_PAT` secret is set (your Personal Access Token from https://tools.developer.homey.app/me).
+
+Dependabot opens a pull request every Monday when a GitHub Action used in the workflows has a new version.
 
 ## Never commit
 

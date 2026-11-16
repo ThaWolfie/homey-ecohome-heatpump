@@ -1,5 +1,7 @@
 # Eco-Home Heat Pump for Homey (Newntide)
 
+[![CI](https://github.com/ThaWolfie/homey-ecohome-heatpump/actions/workflows/ci.yml/badge.svg)](https://github.com/ThaWolfie/homey-ecohome-heatpump/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/ThaWolfie/homey-ecohome-heatpump)](https://github.com/ThaWolfie/homey-ecohome-heatpump/releases/latest)
 [![License: MIT](https://img.shields.io/github/license/ThaWolfie/homey-ecohome-heatpump)](LICENSE)
 [![Version](https://img.shields.io/github/package-json/v/ThaWolfie/homey-ecohome-heatpump)](CHANGELOG.md)
 ![Homey SDK 3](https://img.shields.io/badge/Homey-SDK%203-1F6F8B)
@@ -94,7 +96,7 @@ The app has no npm dependencies; it uses only Node's built-in `https` and `crypt
 
 ## Installation
 
-This app is not in the Homey App Store (yet). You install it with the Homey command-line tool; it stays installed afterwards. Full steps are in [INSTALL.md](INSTALL.md). In short:
+This app is not in the Homey App Store (yet). You install it with the Homey command-line tool; it stays installed afterwards. Download the zip from the [latest release](https://github.com/ThaWolfie/homey-ecohome-heatpump/releases/latest), or clone the repository. Full steps are in [INSTALL.md](INSTALL.md). In short:
 
 ```bash
 npm install -g homey

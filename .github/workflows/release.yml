@@ -1,0 +1,93 @@
+name: Release
+
+# Run from the Actions tab: Release → Run workflow.
+# Bumps the version, updates the changelogs, tags the commit, creates a GitHub release
+# with an installable zip, and optionally publishes to the Homey App Store.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version: patch, minor, major, or an exact version like 0.2.0'
+        required: true
+        default: patch
+      changelog:
+        description: 'What changed, in English (one line, shown in Homey and on GitHub)'
+        required: true
+      publish_to_app_store:
+        description: 'Also publish to the Homey App Store (needs the HOMEY_PAT secret)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Validate Homey app
+        uses: athombv/github-action-homey-app-validate@v1
+        with:
+          level: publish
+
+      - name: Bump version
+        id: bump
+        uses: athombv/github-action-homey-app-version@v2
+        with:
+          version: ${{ inputs.version }}
+          changelog: ${{ inputs.changelog }}
+
+      - name: Sync package.json and CHANGELOG.md
+        env:
+          VERSION: ${{ steps.bump.outputs.version }}
+          CHANGELOG: ${{ inputs.changelog }}
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" .
+          node scripts/versions.js sync
+
+      - name: Commit and tag
+        env:
+          VERSION: ${{ steps.bump.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Release v$VERSION"
+          git tag "v$VERSION"
+          git push origin HEAD "v$VERSION"
+
+      - name: Build installable zip
+        env:
+          VERSION: ${{ steps.bump.outputs.version }}
+        run: git archive --format=zip --prefix="homey-ecohome-heatpump-v$VERSION/" -o "homey-ecohome-heatpump-v$VERSION.zip" "v$VERSION"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.bump.outputs.version }}
+          CHANGELOG: ${{ inputs.changelog }}
+        run: |
+          printf '%s\n\n%s\n' "$CHANGELOG" \
+            "Install: download the zip below, unzip it, and run \`homey app install\` in that folder. See INSTALL.md." > notes.md
+          gh release create "v$VERSION" "homey-ecohome-heatpump-v$VERSION.zip" \
+            --title "v$VERSION" --notes-file notes.md
+
+      - name: Publish to Homey App Store
+        if: ${{ inputs.publish_to_app_store }}
+        uses: athombv/github-action-homey-app-publish@v1
+        with:
+          personal_access_token: ${{ secrets.HOMEY_PAT }}

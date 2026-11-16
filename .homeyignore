@@ -4,3 +4,6 @@ docs/
 .github/
 CHANGELOG.md
 CONTRIBUTING.md
+scripts/
+.gitattributes
+_github/

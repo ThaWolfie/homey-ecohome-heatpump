@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check and validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Syntax check JavaScript
+        # examples/ holds HomeyScripts (top-level await/return), which are not plain Node modules
+        run: |
+          find . -name '*.js' -not -path './node_modules/*' -not -path './.homeybuild/*' -not -path './examples/*' -print0 \
+            | xargs -0 -n1 node --check
+
+      - name: Check JSON files
+        run: |
+          find . -name '*.json' -not -path './node_modules/*' -not -path './.homeybuild/*' -print0 \
+            | xargs -0 -n1 node -e "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))"
+
+      - name: Check versions match
+        run: node scripts/versions.js check
+
+      - name: Validate Homey app
+        uses: athombv/github-action-homey-app-validate@v1
+        with:
+          level: publish
