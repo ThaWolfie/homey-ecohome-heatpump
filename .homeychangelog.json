@@ -1,0 +1,8 @@
+{
+  "0.1.0": { "en": "First version.", "nl": "Eerste versie." },
+  "0.1.1": { "en": "Internal test build.", "nl": "Interne testversie." },
+  "0.1.2": { "en": "Newntide address set and Address mapping setting.", "nl": "Newntide-adressen en instelling Adres-mapping." },
+  "0.1.3": { "en": "Removed wrong compressor speed reading on Newntide units.", "nl": "Onjuiste compressorsnelheid verwijderd bij Newntide." },
+  "0.1.4": { "en": "Shows the real parameter names from the cloud.", "nl": "Toont de echte parameternamen uit de cloud." },
+  "0.1.5": { "en": "New Water return reading.", "nl": "Nieuwe meting Waterretour." }
+}

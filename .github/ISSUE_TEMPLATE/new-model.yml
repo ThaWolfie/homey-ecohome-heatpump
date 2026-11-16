@@ -1,0 +1,34 @@
+name: New heat pump model
+description: Share the address map of a heat pump model that isn't supported yet
+labels: ["new model"]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Heat pump brand and model
+      placeholder: e.g. Newntide Silver line 20
+    validations:
+      required: true
+  - type: textarea
+    id: values
+    attributes:
+      label: Values from the cloud
+      description: Device → Settings → "Values from the cloud". Remove your serial number if you prefer.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: switches
+    attributes:
+      label: Switches found in the cloud
+      description: Device → Settings → "Switches found in the cloud"
+      render: text
+  - type: textarea
+    id: status
+    attributes:
+      label: What the Eco-Home app shows
+      description: Eco-Home app → Status query, at the same moment (outlet, return, tank, outdoor, flow)
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else

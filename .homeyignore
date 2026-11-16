@@ -1,1 +1,6 @@
 test/
+examples/
+docs/
+.github/
+CHANGELOG.md
+CONTRIBUTING.md

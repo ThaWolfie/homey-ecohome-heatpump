@@ -3,6 +3,32 @@
   "version": "0.1.5",
   "private": true,
   "main": "app.js",
-  "description": "Unofficial Homey app for Newntide heat pumps via the Eco-Home cloud",
-  "license": "MIT"
+  "description": "Unofficial Homey Pro app for Newntide air-to-water heat pumps (Eco-Home app): heating, hot water, setpoints, temperatures and flow via the Eco-Home cloud",
+  "license": "MIT",
+  "keywords": [
+    "homey",
+    "homey-app",
+    "homey-pro",
+    "athom",
+    "heat-pump",
+    "warmtepomp",
+    "newntide",
+    "eco-home",
+    "ecohome",
+    "bataviaheat",
+    "air-to-water",
+    "r290",
+    "smart-home",
+    "home-automation",
+    "tibber"
+  ],
+  "author": "Mels Wolf",
+  "homepage": "https://github.com/ThaWolfie/homey-ecohome-heatpump#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThaWolfie/homey-ecohome-heatpump.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ThaWolfie/homey-ecohome-heatpump/issues"
+  }
 }
