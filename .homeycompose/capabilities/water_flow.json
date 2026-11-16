@@ -1,0 +1,11 @@
+{
+  "type": "number",
+  "title": { "en": "Water flow", "nl": "Waterdebiet" },
+  "units": { "en": "L/h" },
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/flow.svg",
+  "insights": true
+}

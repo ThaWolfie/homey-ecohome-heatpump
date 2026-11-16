@@ -1,0 +1,139 @@
+{
+  "triggers": [
+    {
+      "id": "tank_temperature_changed",
+      "title": { "en": "Hot water tank temperature changed", "nl": "Boilertemperatuur is veranderd" },
+      "tokens": [
+        { "name": "temperature", "type": "number", "title": { "en": "Temperature", "nl": "Temperatuur" }, "example": 48 }
+      ]
+    },
+    {
+      "id": "outdoor_temperature_changed",
+      "title": { "en": "Outdoor temperature changed", "nl": "Buitentemperatuur is veranderd" },
+      "tokens": [
+        { "name": "temperature", "type": "number", "title": { "en": "Temperature", "nl": "Temperatuur" }, "example": 7 }
+      ]
+    },
+    {
+      "id": "compressor_started",
+      "title": { "en": "Compressor started", "nl": "Compressor is gestart" }
+    },
+    {
+      "id": "compressor_stopped",
+      "title": { "en": "Compressor stopped", "nl": "Compressor is gestopt" }
+    },
+    {
+      "id": "mode_changed",
+      "title": { "en": "Operating mode changed", "nl": "Werkmodus is veranderd" },
+      "tokens": [
+        { "name": "mode", "type": "string", "title": { "en": "Mode", "nl": "Modus" }, "example": "heat" }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "heating_is_on",
+      "title": { "en": "Heating is !{{on|off}}", "nl": "Verwarming is !{{aan|uit}}" }
+    },
+    {
+      "id": "hot_water_is_on",
+      "title": { "en": "Hot water is !{{on|off}}", "nl": "Warm water is !{{aan|uit}}" }
+    },
+    {
+      "id": "silent_is_on",
+      "title": { "en": "Silent mode is !{{on|off}}", "nl": "Stille modus is !{{aan|uit}}" }
+    },
+    {
+      "id": "compressor_running",
+      "title": { "en": "Compressor is !{{running|not running}}", "nl": "Compressor !{{draait|draait niet}}" }
+    },
+    {
+      "id": "mode_is",
+      "title": { "en": "Operating mode !{{is|is not}}…", "nl": "Werkmodus !{{is|is niet}}…" },
+      "titleFormatted": { "en": "Operating mode !{{is|is not}} [[mode]]", "nl": "Werkmodus !{{is|is niet}} [[mode]]" },
+      "args": [
+        {
+          "name": "mode",
+          "type": "dropdown",
+          "values": [
+            { "id": "heat", "label": { "en": "Heating", "nl": "Verwarmen" } },
+            { "id": "cool", "label": { "en": "Cooling", "nl": "Koelen" } },
+            { "id": "auto", "label": { "en": "Automatic", "nl": "Automatisch" } }
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "set_heating",
+      "title": { "en": "Turn heating on or off", "nl": "Verwarming aan- of uitzetten" },
+      "titleFormatted": { "en": "Turn heating [[state]]", "nl": "Zet verwarming [[state]]" },
+      "args": [
+        { "name": "state", "type": "dropdown", "values": [
+          { "id": "on", "label": { "en": "on", "nl": "aan" } },
+          { "id": "off", "label": { "en": "off", "nl": "uit" } }
+        ] }
+      ]
+    },
+    {
+      "id": "set_hot_water",
+      "title": { "en": "Turn hot water on or off", "nl": "Warm water aan- of uitzetten" },
+      "titleFormatted": { "en": "Turn hot water [[state]]", "nl": "Zet warm water [[state]]" },
+      "args": [
+        { "name": "state", "type": "dropdown", "values": [
+          { "id": "on", "label": { "en": "on", "nl": "aan" } },
+          { "id": "off", "label": { "en": "off", "nl": "uit" } }
+        ] }
+      ]
+    },
+    {
+      "id": "set_silent",
+      "title": { "en": "Turn silent mode on or off", "nl": "Stille modus aan- of uitzetten" },
+      "titleFormatted": { "en": "Turn silent mode [[state]]", "nl": "Zet stille modus [[state]]" },
+      "args": [
+        { "name": "state", "type": "dropdown", "values": [
+          { "id": "on", "label": { "en": "on", "nl": "aan" } },
+          { "id": "off", "label": { "en": "off", "nl": "uit" } }
+        ] }
+      ]
+    },
+    {
+      "id": "set_hot_water_setpoint",
+      "title": { "en": "Set hot water temperature", "nl": "Warmwater-temperatuur instellen" },
+      "titleFormatted": { "en": "Set hot water to [[temperature]] °C", "nl": "Zet warm water op [[temperature]] °C" },
+      "args": [
+        { "name": "temperature", "type": "number", "min": 18, "max": 75, "step": 1, "placeholder": { "en": "50" } }
+      ]
+    },
+    {
+      "id": "set_heating_setpoint",
+      "title": { "en": "Set water temperature setpoint", "nl": "Watertemperatuur instellen" },
+      "titleFormatted": { "en": "Set water temperature to [[temperature]] °C", "nl": "Zet watertemperatuur op [[temperature]] °C" },
+      "hint": { "en": "Heating 20–80 °C, cooling 10–35 °C. Does not work while a heating curve is active." },
+      "args": [
+        { "name": "temperature", "type": "number", "min": 10, "max": 80, "step": 1, "placeholder": { "en": "35" } }
+      ]
+    },
+    {
+      "id": "set_mode",
+      "title": { "en": "Set operating mode", "nl": "Werkmodus instellen" },
+      "titleFormatted": { "en": "Set operating mode to [[mode]]", "nl": "Zet werkmodus op [[mode]]" },
+      "args": [
+        {
+          "name": "mode",
+          "type": "dropdown",
+          "values": [
+            { "id": "heat", "label": { "en": "Heating", "nl": "Verwarmen" } },
+            { "id": "cool", "label": { "en": "Cooling", "nl": "Koelen" } },
+            { "id": "auto", "label": { "en": "Automatic", "nl": "Automatisch" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "refresh",
+      "title": { "en": "Refresh data now", "nl": "Gegevens nu verversen" }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "nl.melswolf.ecohome",
+  "version": "0.1.5",
+  "private": true,
+  "main": "app.js",
+  "description": "Unofficial Homey app for Newntide heat pumps via the Eco-Home cloud",
+  "license": "MIT"
+}

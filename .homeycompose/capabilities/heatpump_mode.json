@@ -1,0 +1,13 @@
+{
+  "type": "enum",
+  "title": { "en": "Operating mode", "nl": "Werkmodus" },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "values": [
+    { "id": "heat", "title": { "en": "Heating", "nl": "Verwarmen" } },
+    { "id": "cool", "title": { "en": "Cooling", "nl": "Koelen" } },
+    { "id": "auto", "title": { "en": "Automatic", "nl": "Automatisch" } }
+  ],
+  "insights": false
+}

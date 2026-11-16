@@ -1,0 +1,32 @@
+{
+  "id": "nl.melswolf.ecohome",
+  "version": "0.1.5",
+  "compatibility": ">=12.0.0",
+  "sdk": 3,
+  "runtime": "nodejs",
+  "platforms": ["local"],
+  "name": {
+    "en": "Eco-Home Heat Pump",
+    "nl": "Eco-Home Warmtepomp"
+  },
+  "description": {
+    "en": "Control Newntide heat pumps that use the Eco-Home app",
+    "nl": "Bedien Newntide-warmtepompen die de Eco-Home-app gebruiken"
+  },
+  "category": ["climate"],
+  "brandColor": "#1F6F8B",
+  "permissions": [],
+  "author": {
+    "name": "Mels Wolf"
+  },
+  "contributors": {
+    "developers": [
+      { "name": "Ruben Sloot (BataviaHeat Home Assistant integration, MIT)" }
+    ]
+  },
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  }
+}

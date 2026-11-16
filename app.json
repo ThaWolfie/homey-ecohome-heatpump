@@ -1,0 +1,890 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "nl.melswolf.ecohome",
+  "version": "0.1.5",
+  "compatibility": ">=12.0.0",
+  "sdk": 3,
+  "runtime": "nodejs",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Eco-Home Heat Pump",
+    "nl": "Eco-Home Warmtepomp"
+  },
+  "description": {
+    "en": "Control Newntide heat pumps that use the Eco-Home app",
+    "nl": "Bedien Newntide-warmtepompen die de Eco-Home-app gebruiken"
+  },
+  "category": [
+    "climate"
+  ],
+  "brandColor": "#1F6F8B",
+  "permissions": [],
+  "author": {
+    "name": "Mels Wolf"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Ruben Sloot (BataviaHeat Home Assistant integration, MIT)"
+      }
+    ]
+  },
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "tank_temperature_changed",
+        "title": {
+          "en": "Hot water tank temperature changed",
+          "nl": "Boilertemperatuur is veranderd"
+        },
+        "tokens": [
+          {
+            "name": "temperature",
+            "type": "number",
+            "title": {
+              "en": "Temperature",
+              "nl": "Temperatuur"
+            },
+            "example": 48
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "outdoor_temperature_changed",
+        "title": {
+          "en": "Outdoor temperature changed",
+          "nl": "Buitentemperatuur is veranderd"
+        },
+        "tokens": [
+          {
+            "name": "temperature",
+            "type": "number",
+            "title": {
+              "en": "Temperature",
+              "nl": "Temperatuur"
+            },
+            "example": 7
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "compressor_started",
+        "title": {
+          "en": "Compressor started",
+          "nl": "Compressor is gestart"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "compressor_stopped",
+        "title": {
+          "en": "Compressor stopped",
+          "nl": "Compressor is gestopt"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "mode_changed",
+        "title": {
+          "en": "Operating mode changed",
+          "nl": "Werkmodus is veranderd"
+        },
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus"
+            },
+            "example": "heat"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "heating_is_on",
+        "title": {
+          "en": "Heating is !{{on|off}}",
+          "nl": "Verwarming is !{{aan|uit}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "hot_water_is_on",
+        "title": {
+          "en": "Hot water is !{{on|off}}",
+          "nl": "Warm water is !{{aan|uit}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "silent_is_on",
+        "title": {
+          "en": "Silent mode is !{{on|off}}",
+          "nl": "Stille modus is !{{aan|uit}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "compressor_running",
+        "title": {
+          "en": "Compressor is !{{running|not running}}",
+          "nl": "Compressor !{{draait|draait niet}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      },
+      {
+        "id": "mode_is",
+        "title": {
+          "en": "Operating mode !{{is|is not}}…",
+          "nl": "Werkmodus !{{is|is niet}}…"
+        },
+        "titleFormatted": {
+          "en": "Operating mode !{{is|is not}} [[mode]]",
+          "nl": "Werkmodus !{{is|is niet}} [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "heat",
+                "label": {
+                  "en": "Heating",
+                  "nl": "Verwarmen"
+                }
+              },
+              {
+                "id": "cool",
+                "label": {
+                  "en": "Cooling",
+                  "nl": "Koelen"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Automatic",
+                  "nl": "Automatisch"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "set_heating",
+        "title": {
+          "en": "Turn heating on or off",
+          "nl": "Verwarming aan- of uitzetten"
+        },
+        "titleFormatted": {
+          "en": "Turn heating [[state]]",
+          "nl": "Zet verwarming [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "label": {
+                  "en": "on",
+                  "nl": "aan"
+                }
+              },
+              {
+                "id": "off",
+                "label": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_hot_water",
+        "title": {
+          "en": "Turn hot water on or off",
+          "nl": "Warm water aan- of uitzetten"
+        },
+        "titleFormatted": {
+          "en": "Turn hot water [[state]]",
+          "nl": "Zet warm water [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "label": {
+                  "en": "on",
+                  "nl": "aan"
+                }
+              },
+              {
+                "id": "off",
+                "label": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_silent",
+        "title": {
+          "en": "Turn silent mode on or off",
+          "nl": "Stille modus aan- of uitzetten"
+        },
+        "titleFormatted": {
+          "en": "Turn silent mode [[state]]",
+          "nl": "Zet stille modus [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "label": {
+                  "en": "on",
+                  "nl": "aan"
+                }
+              },
+              {
+                "id": "off",
+                "label": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_hot_water_setpoint",
+        "title": {
+          "en": "Set hot water temperature",
+          "nl": "Warmwater-temperatuur instellen"
+        },
+        "titleFormatted": {
+          "en": "Set hot water to [[temperature]] °C",
+          "nl": "Zet warm water op [[temperature]] °C"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          },
+          {
+            "name": "temperature",
+            "type": "number",
+            "min": 18,
+            "max": 75,
+            "step": 1,
+            "placeholder": {
+              "en": "50"
+            }
+          }
+        ]
+      },
+      {
+        "id": "set_heating_setpoint",
+        "title": {
+          "en": "Set water temperature setpoint",
+          "nl": "Watertemperatuur instellen"
+        },
+        "titleFormatted": {
+          "en": "Set water temperature to [[temperature]] °C",
+          "nl": "Zet watertemperatuur op [[temperature]] °C"
+        },
+        "hint": {
+          "en": "Heating 20–80 °C, cooling 10–35 °C. Does not work while a heating curve is active."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          },
+          {
+            "name": "temperature",
+            "type": "number",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "placeholder": {
+              "en": "35"
+            }
+          }
+        ]
+      },
+      {
+        "id": "set_mode",
+        "title": {
+          "en": "Set operating mode",
+          "nl": "Werkmodus instellen"
+        },
+        "titleFormatted": {
+          "en": "Set operating mode to [[mode]]",
+          "nl": "Zet werkmodus op [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "heat",
+                "label": {
+                  "en": "Heating",
+                  "nl": "Verwarmen"
+                }
+              },
+              {
+                "id": "cool",
+                "label": {
+                  "en": "Cooling",
+                  "nl": "Koelen"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Automatic",
+                  "nl": "Automatisch"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "refresh",
+        "title": {
+          "en": "Refresh data now",
+          "nl": "Gegevens nu verversen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=heatpump"
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Heat pump",
+        "nl": "Warmtepomp"
+      },
+      "class": "heatpump",
+      "capabilities": [
+        "onoff",
+        "heatpump_mode",
+        "target_temperature",
+        "measure_temperature",
+        "measure_temperature.inlet",
+        "onoff.heating",
+        "onoff.hot_water",
+        "target_temperature.hot_water",
+        "measure_temperature.tank",
+        "onoff.silent",
+        "measure_temperature.room",
+        "measure_temperature.outdoor",
+        "compressor_speed",
+        "water_flow"
+      ],
+      "capabilitiesOptions": {
+        "onoff": {
+          "title": {
+            "en": "Heat pump",
+            "nl": "Warmtepomp"
+          }
+        },
+        "target_temperature": {
+          "title": {
+            "en": "Water temperature setpoint",
+            "nl": "Ingestelde watertemperatuur"
+          },
+          "min": 10,
+          "max": 80,
+          "step": 1,
+          "decimals": 0
+        },
+        "measure_temperature": {
+          "title": {
+            "en": "Water outlet",
+            "nl": "Wateruitlaat"
+          }
+        },
+        "onoff.heating": {
+          "title": {
+            "en": "Heating",
+            "nl": "Verwarming"
+          },
+          "uiComponent": "toggle",
+          "insightsTitleTrue": {
+            "en": "Heating turned on",
+            "nl": "Verwarming aangezet"
+          },
+          "insightsTitleFalse": {
+            "en": "Heating turned off",
+            "nl": "Verwarming uitgezet"
+          }
+        },
+        "onoff.hot_water": {
+          "title": {
+            "en": "Hot water",
+            "nl": "Warm water"
+          },
+          "uiComponent": "toggle",
+          "insightsTitleTrue": {
+            "en": "Hot water turned on",
+            "nl": "Warm water aangezet"
+          },
+          "insightsTitleFalse": {
+            "en": "Hot water turned off",
+            "nl": "Warm water uitgezet"
+          }
+        },
+        "onoff.silent": {
+          "title": {
+            "en": "Silent mode",
+            "nl": "Stille modus"
+          },
+          "uiComponent": "toggle",
+          "insightsTitleTrue": {
+            "en": "Silent mode on",
+            "nl": "Stille modus aan"
+          },
+          "insightsTitleFalse": {
+            "en": "Silent mode off",
+            "nl": "Stille modus uit"
+          }
+        },
+        "target_temperature.hot_water": {
+          "title": {
+            "en": "Hot water setpoint",
+            "nl": "Warmwater-temperatuur"
+          },
+          "min": 18,
+          "max": 75,
+          "step": 1,
+          "decimals": 0
+        },
+        "measure_temperature.tank": {
+          "title": {
+            "en": "Hot water tank",
+            "nl": "Boiler"
+          }
+        },
+        "measure_temperature.room": {
+          "title": {
+            "en": "Room",
+            "nl": "Kamer"
+          }
+        },
+        "measure_temperature.outdoor": {
+          "title": {
+            "en": "Outdoor",
+            "nl": "Buiten"
+          }
+        },
+        "measure_temperature.inlet": {
+          "title": {
+            "en": "Water return",
+            "nl": "Waterretour"
+          }
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/heatpump/assets/images/small.png",
+        "large": "/drivers/heatpump/assets/images/large.png",
+        "xlarge": "/drivers/heatpump/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_credentials",
+          "template": "login_credentials",
+          "options": {
+            "title": {
+              "en": "Eco-Home account",
+              "nl": "Eco-Home-account"
+            },
+            "usernameLabel": {
+              "en": "E-mail / username",
+              "nl": "E-mail / gebruikersnaam"
+            },
+            "usernamePlaceholder": {
+              "en": "Use a second account, not the one on your phone"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "nl": "Wachtwoord"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "login_credentials",
+          "template": "login_credentials",
+          "options": {
+            "title": {
+              "en": "Update Eco-Home login",
+              "nl": "Eco-Home-login bijwerken"
+            }
+          }
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Connection",
+            "nl": "Verbinding"
+          },
+          "children": [
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "label": {
+                "en": "Refresh every (seconds)",
+                "nl": "Verversen elke (seconden)"
+              },
+              "value": 60,
+              "min": 30,
+              "max": 600,
+              "units": {
+                "en": "s"
+              }
+            },
+            {
+              "id": "login_type",
+              "type": "dropdown",
+              "label": {
+                "en": "Login type",
+                "nl": "Logintype"
+              },
+              "hint": {
+                "en": "Leave on 2 unless support asks you to change it."
+              },
+              "value": "2",
+              "values": [
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "2 (default)"
+                  }
+                },
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Advanced",
+            "nl": "Geavanceerd"
+          },
+          "children": [
+            {
+              "id": "heating_switch_address",
+              "type": "number",
+              "label": {
+                "en": "Heating switch address",
+                "nl": "Adres verwarmingsschakelaar"
+              },
+              "hint": {
+                "en": "0 = detect automatically. Only change this if the Heating button does not work; see 'Switches found in the cloud' below."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 99999
+            },
+            {
+              "id": "hot_water_switch_address",
+              "type": "number",
+              "label": {
+                "en": "Hot water switch address",
+                "nl": "Adres warmwaterschakelaar"
+              },
+              "hint": {
+                "en": "0 = detect automatically. Only change this if the Hot water button does not work; see 'Switches found in the cloud' below."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 99999
+            },
+            {
+              "id": "address_map",
+              "type": "textarea",
+              "label": {
+                "en": "Address mapping",
+                "nl": "Adres-mapping"
+              },
+              "hint": {
+                "en": "Optional. One per line: key=address (0 = off). Keys: heating_setpoint, cooling_setpoint, hot_water_setpoint, water_outlet, hot_water_tank, outdoor, room, compressor_speed, water_flow, silent_mode. Example: water_outlet=2138. Addresses are listed under 'Values from the cloud'.",
+                "nl": "Optioneel. Eén per regel: sleutel=adres (0 = uit). Voorbeeld: water_outlet=2138. De adressen staan onder 'Waarden uit de cloud'."
+              },
+              "value": ""
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Detected (read-only)",
+            "nl": "Gevonden (alleen lezen)"
+          },
+          "children": [
+            {
+              "id": "device_code",
+              "type": "label",
+              "label": {
+                "en": "Device code"
+              },
+              "value": ""
+            },
+            {
+              "id": "account",
+              "type": "label",
+              "label": {
+                "en": "Eco-Home account"
+              },
+              "value": ""
+            },
+            {
+              "id": "detected_switches",
+              "type": "textarea",
+              "label": {
+                "en": "Switches found in the cloud"
+              },
+              "hint": {
+                "en": "Diagnostic info. Send this to whoever helps you if a button does not work."
+              },
+              "value": ""
+            },
+            {
+              "id": "detected_values",
+              "type": "textarea",
+              "label": {
+                "en": "Values from the cloud",
+                "nl": "Waarden uit de cloud"
+              },
+              "hint": {
+                "en": "Every parameter the heat pump reports, with what the app uses it for (→). Diagnostic info: send this to whoever helps you if a value stays empty.",
+                "nl": "Alle parameters die de warmtepomp doorgeeft, met waarvoor de app ze gebruikt (→). Stuur dit door als een waarde leeg blijft."
+              },
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "id": "heatpump"
+    }
+  ],
+  "capabilities": {
+    "compressor_speed": {
+      "type": "number",
+      "title": {
+        "en": "Compressor speed",
+        "nl": "Compressortoerental"
+      },
+      "units": {
+        "en": "rpm"
+      },
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/compressor.svg",
+      "insights": true
+    },
+    "heatpump_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Operating mode",
+        "nl": "Werkmodus"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "heat",
+          "title": {
+            "en": "Heating",
+            "nl": "Verwarmen"
+          }
+        },
+        {
+          "id": "cool",
+          "title": {
+            "en": "Cooling",
+            "nl": "Koelen"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch"
+          }
+        }
+      ],
+      "insights": false
+    },
+    "water_flow": {
+      "type": "number",
+      "title": {
+        "en": "Water flow",
+        "nl": "Waterdebiet"
+      },
+      "units": {
+        "en": "L/h"
+      },
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/flow.svg",
+      "insights": true
+    }
+  }
+}
