@@ -2,6 +2,8 @@
 
 This app is not in the Homey App Store. You install it from your computer with the Homey command-line tool. It stays installed afterwards.
 
+On macOS, Linux or WSL you can do steps 2–5 in one go with the [quick start block in the README](README.md#quick-start). The steps below do the same by hand.
+
 ## One-time setup (about 10 minutes)
 
 1. Install **Node.js LTS** from https://nodejs.org.

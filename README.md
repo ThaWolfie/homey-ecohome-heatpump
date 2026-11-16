@@ -20,7 +20,7 @@
 - [Features](#features)
 - [Supported heat pumps](#supported-heat-pumps)
 - [How it works](#how-it-works)
-- [Installation](#installation)
+- [Installation](#installation) ([quick start](#quick-start))
 - [Setup: use a second Eco-Home account](#setup-use-a-second-eco-home-account)
 - [Device settings](#device-settings)
 - [Address maps](#address-maps)
@@ -96,17 +96,38 @@ The app has no npm dependencies; it uses only Node's built-in `https` and `crypt
 
 ## Installation
 
-This app is not in the Homey App Store (yet). You install it with the Homey command-line tool; it stays installed afterwards. Download the zip from the [latest release](https://github.com/ThaWolfie/homey-ecohome-heatpump/releases/latest), or clone the repository. Full steps are in [INSTALL.md](INSTALL.md). In short:
+This app is not in the Homey App Store (yet). You install it from your computer with the Homey command-line tool; it stays installed on your Homey afterwards.
+
+You need a **Homey Pro** with firmware 12.0.0 or newer, and [Node.js LTS](https://nodejs.org) on your computer.
+
+### Quick start
+
+Open a terminal (macOS, Linux, or WSL on Windows), paste this block and press Enter:
 
 ```bash
-npm install -g homey
-homey login
-git clone https://github.com/ThaWolfie/homey-ecohome-heatpump.git
-cd homey-ecohome-heatpump
-homey app install
+(
+  set -e
+  command -v npm >/dev/null || { echo "Install Node.js LTS from https://nodejs.org first, then paste this again."; false; }
+  command -v homey >/dev/null || npm install -g homey
+  homey whoami >/dev/null 2>&1 || homey login
+  repo=ThaWolfie/homey-ecohome-heatpump
+  tag=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/$repo/releases/latest"); tag=${tag##*/}
+  dir=$(mktemp -d)
+  echo "Downloading Eco-Home Heat Pump $tag…"
+  curl -fsSL "https://github.com/$repo/archive/refs/tags/$tag.tar.gz" | tar -xz -C "$dir" --strip-components 1
+  cd "$dir" && homey app install
+)
 ```
 
-You need a **Homey Pro** with firmware 12.0.0 or newer, and Node.js LTS on your computer.
+It installs the Homey command-line tool if you don't have it, asks you to log in with your Homey account (a browser window opens) the first time, downloads the **latest release** and installs it. Pick your Homey Pro when asked. Paste the same block again to update.
+
+If `npm install -g homey` fails with a permission error on Linux, run `sudo npm install -g homey` once and paste the block again.
+
+Then [add the heat pump with a second Eco-Home account](#setup-use-a-second-eco-home-account).
+
+### Step by step
+
+Prefer to do it by hand, or on Windows without WSL? Follow [INSTALL.md](INSTALL.md).
 
 ## Setup: use a second Eco-Home account
 
@@ -252,7 +273,7 @@ Contributions are welcome, especially address maps for other models. See [CONTRI
 
 **Eco-Home Warmtepomp voor Homey** is een onofficiële Homey Pro-app voor Newntide lucht-water warmtepompen die je met de Eco-Home-app bedient (getest met de Newntide Silver line 20). Je ziet in Homey de wateruitlaat, waterretour, boilertemperatuur, buitentemperatuur en het waterdebiet. Je kunt verwarming en warm water aan/uit zetten, de modus kiezen en de ingestelde temperaturen aanpassen, ook vanuit Flows.
 
-- **Installeren:** met de Homey CLI (`homey app install`), zie [INSTALL.md](INSTALL.md).
+- **Installeren:** plak het [quick start-blok](#quick-start) in een terminal (macOS, Linux of WSL), of volg [INSTALL.md](INSTALL.md).
 - **Tweede account:** gebruik een **tweede Eco-Home-account** waarmee je de warmtepomp deelt; de cloud staat maar één login per account toe.
 - **Voorbeeld:** in [`examples/`](examples/) staat een HomeyScript dat verwarming en warm water aanstuurt op de Tibber-prijs.
 
