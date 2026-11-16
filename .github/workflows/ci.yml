@@ -1,17 +1,25 @@
 name: CI
 
+# Checks every push to master and every pull request. The Release workflow
+# also runs this first (workflow_call), so a broken version is never released.
+
 on:
   push:
     branches: [main, master]
   pull_request:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  check:
-    name: Check and validate
+  lint:
+    name: Syntax, JSON and versions
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -34,10 +42,26 @@ jobs:
       - name: Check versions match
         run: node scripts/versions.js check
 
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+
       - name: Run tests
         # Fake Eco-Home cloud + fake Homey runtime: login, polling, value parsing,
         # address detection, controls, flow cards and manifest consistency.
         run: npm test
+
+  validate:
+    name: Homey app validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
 
       - name: Validate Homey app
         uses: athombv/github-action-homey-app-validate@v1

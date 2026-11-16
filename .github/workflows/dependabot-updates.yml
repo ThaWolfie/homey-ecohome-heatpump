@@ -1,0 +1,72 @@
+name: Dependabot updates
+
+# Merges Dependabot pull requests by itself once CI has passed on them, as long
+# as no dependency jumps a major version. Major updates stay open for a human.
+#
+# Runs after CI (workflow_run) instead of on the pull request, so it never runs
+# the pull request's code with write access, and needs no repository setting.
+# Note: a merge made with GITHUB_TOKEN does not start a new CI run on master;
+# the pull request's own CI run is the check.
+#
+# (GitHub also shows its built-in "Dependabot Updates" entry: that is Dependabot
+# itself looking for new versions, configured in .github/dependabot.yml.)
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependabot-updates
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    name: Merge if safe
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    steps:
+      - name: Merge patch and minor updates
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          pr=$(gh pr list --head "$BRANCH" --state open --json number,author,headRefOid \
+            --jq ".[] | select(.author.login == \"app/dependabot\" and .headRefOid == \"$SHA\") | .number")
+          if [ -z "$pr" ]; then
+            echo "No open Dependabot pull request at $SHA (closed, or a newer commit is still being checked)."
+            exit 0
+          fi
+
+          # Dependabot starts a line with "Updates `name` from X to Y" (grouped) or
+          # "Bumps [name](url) from X to Y" (single) for every dependency. Only those
+          # lines count: the rest of the body quotes upstream release notes.
+          # shellcheck disable=SC2016 # backticks in the pattern are literal Markdown
+          lines=$(gh pr view "$pr" --json body --jq .body \
+            | grep -E '^(Updates|Bumps) .* from `?v?[0-9]' || true)
+          found=$(printf '%s' "$lines" | grep -c . || true)
+          # shellcheck disable=SC2016 # backticks in the pattern are literal Markdown
+          majors=$(printf '%s\n' "$lines" \
+            | grep -oE 'from `?v?[0-9]+[^ `]*`? to `?v?[0-9]+' \
+            | sed -E 's/from `?v?([0-9]+)[^ ]* to `?v?([0-9]+).*/\1 \2/' \
+            | awk '$1 != $2' || true)
+
+          if [ "$found" -eq 0 ]; then
+            gh pr comment "$pr" --body "Not merged automatically: could not read the version changes. Please review and merge by hand."
+          elif [ -n "$majors" ]; then
+            gh pr comment "$pr" --body "Not merged automatically: this includes a **major** version update. CI passed; please review the release notes and merge by hand."
+          else
+            gh pr merge "$pr" --squash --delete-branch --match-head-commit "$SHA"
+            echo "Merged #$pr"
+          fi

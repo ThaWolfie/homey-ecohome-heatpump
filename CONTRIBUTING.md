@@ -24,7 +24,15 @@ Thanks for helping! The most useful contribution is an **address map for a heat 
 3. The workflow validates the app, bumps the version in all files, updates `CHANGELOG.md` and `.homeychangelog.json`, tags the commit, and creates a GitHub release with an installable zip.
 4. Tick **Also publish to the Homey App Store** only when the `HOMEY_PAT` secret is set (your Personal Access Token from https://tools.developer.homey.app/me).
 
-Dependabot opens a pull request every Monday when a GitHub Action used in the workflows has a new version.
+## Workflows
+
+| Workflow | When | What |
+| --- | --- | --- |
+| **CI** | Every push to master and every pull request | Syntax, JSON and version checks, the tests, and `homey app validate` (publish level), as three parallel jobs. |
+| **Dependabot updates** | After CI passes on a Dependabot pull request | Squash-merges it when every update is a patch or minor version. Major updates get a comment and wait for you. |
+| **Release** | By hand, on master | Runs CI first, then releases exactly the commit CI tested. |
+
+Dependabot itself opens a pull request every Monday when a GitHub Action used in the workflows has a new version (configured in `.github/dependabot.yml`; GitHub lists those runs as its built-in "Dependabot Updates").
 
 ## Never commit
 

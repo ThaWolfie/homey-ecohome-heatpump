@@ -1,7 +1,7 @@
 name: Release
 
-# Run from the Actions tab: Release → Run workflow.
-# Bumps the version, updates the changelogs, tags the commit, creates a GitHub release
+# Run from the Actions tab: Release → Run workflow (on the default branch).
+# Runs the full CI first, then bumps the version, updates the changelogs, tags the commit, creates a GitHub release
 # with an installable zip, and optionally publishes to the Homey App Store.
 
 on:
@@ -27,25 +27,26 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  ci:
+    name: CI
+    # Releases are cut from the default branch only, so CI checks exactly what is released.
+    if: github.ref_name == github.event.repository.default_branch
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
   release:
     name: Release
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ github.sha }}
 
       - uses: actions/setup-node@v7
         with:
           node-version: lts/*
-
-      - name: Run tests
-        run: npm test
-
-      - name: Validate Homey app
-        uses: athombv/github-action-homey-app-validate@v1
-        with:
-          level: publish
 
       - name: Bump version
         id: bump
@@ -71,7 +72,10 @@ jobs:
           git add -A
           git commit -m "Release v$VERSION"
           git tag "v$VERSION"
-          git push origin HEAD "v$VERSION"
+          # The checkout is the exact commit CI tested (detached), so push it to the branch
+          # explicitly. If someone pushed in the meantime this is refused, instead of
+          # releasing code CI never saw.
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME" "v$VERSION"
 
       - name: Build installable zip
         env:
