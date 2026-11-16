@@ -34,6 +34,11 @@ jobs:
       - name: Check versions match
         run: node scripts/versions.js check
 
+      - name: Run tests
+        # Fake Eco-Home cloud + fake Homey runtime: login, polling, value parsing,
+        # address detection, controls, flow cards and manifest consistency.
+        run: npm test
+
       - name: Validate Homey app
         uses: athombv/github-action-homey-app-validate@v1
         with:

@@ -3,6 +3,9 @@
   "version": "0.1.5",
   "private": true,
   "main": "app.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "description": "Unofficial Homey Pro app for Newntide air-to-water heat pumps (Eco-Home app): heating, hot water, setpoints, temperatures and flow via the Eco-Home cloud",
   "license": "MIT",
   "keywords": [

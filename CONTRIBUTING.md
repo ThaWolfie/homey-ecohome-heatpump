@@ -14,7 +14,8 @@ Thanks for helping! The most useful contribution is an **address map for a heat 
 - Keep the app free of npm dependencies (Node built-ins only).
 - Add new address sets next to `A` and `A_NEWNTIDE` in `drivers/heatpump/device.js`, with a comment saying which model they were confirmed on.
 - Don't bump the version in a pull request; the Release workflow does that.
-- Run `homey app validate` before opening a pull request. CI runs the same check, plus a syntax and version check, on every push and pull request.
+- Run `npm test` and `homey app validate` before opening a pull request. CI runs both, plus a syntax and version check, on every push and pull request, and the Release workflow will not release while a test fails.
+- The tests (`test/`) use a fake Eco-Home cloud and a fake Homey, so they need no account or heat pump. When you add a model or a value, add it to the fake cloud in `test/helpers.js` and assert it in `test/device.test.js`.
 
 ## Releasing (maintainers)
 

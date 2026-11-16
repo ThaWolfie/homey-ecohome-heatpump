@@ -39,6 +39,9 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Run tests
+        run: npm test
+
       - name: Validate Homey app
         uses: athombv/github-action-homey-app-validate@v1
         with:
